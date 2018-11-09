@@ -16,7 +16,6 @@ export default {
     return axios.get('https://swapi.co/api/people/1/')
     .then(res => {
       console.log('response data: ', res.data)
-      console.log('context: ', context)
       return {
         person: {... res.data}
       }

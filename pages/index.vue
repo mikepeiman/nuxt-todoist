@@ -1,25 +1,31 @@
 <template>
-  <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        nuxt-todoist
-      </h1>
-      <h2 class="subtitle">
-        Providing alternate views and sorting for TODOist tasks
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
+<section class="container">
+  <div>
+    <logo />
+    <h1 class="title">
+      nuxt-todoist
+    </h1>
+    <h2 class="subtitle">
+      Providing alternate views and sorting for TODOist tasks
+    </h2>
+    <div class="links">
+      <a
+          href="https://tasks/"
           target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
+          class="button--green">TODOist tasks</a>
+      <a
+          :href="
+          this.authURL +
+          '?client_id=' +
+          this.clientID +
+          '&scope=data:read' +
+          '&state=' +
+          this.state"
           target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
+          class="button--grey">TODOist auth</a>
     </div>
-  </section>
+  </div>
+</section>
 </template>
 
 <script>
@@ -30,19 +36,42 @@ export default {
   components: {
     Logo
   },
-  created: function() {
-      console.log('test created hook')
-      axios.get('https://swapi.co/api/people/1/')
+  created: function () {
+    console.log('test created hook')
+    axios.get('https://swapi.co/api/people/1/')
       .then(res => {
         console.log(res.data)
       })
 
+  },
+  methods: {
+    runAuth() {
+      console.log('runAuth running')
+      axios.get(
+          this.authURL +
+          '?client_id=' +
+          this.clientID +
+          '&scope=data:read' +
+          '&state=' +
+          this.state
+        )
+        .then(res => {
+          console.log(res.data)
+        })
+    }
+  },
+  data() {
+    return {
+      clientID: 'ea192b83308a4580b068497defed4b60',
+      clientSecret: 'c9bb957808464542b70b67e11fa056e8',
+      authURL: 'https://todoist.com/oauth/authorize',
+      state: 'mikessecret'
+    }
   }
 }
 </script>
 
 <style>
-
 .container {
   min-height: 100vh;
   display: flex;
