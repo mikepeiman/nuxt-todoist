@@ -24,10 +24,19 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
+import axios from 'axios'
 
 export default {
   components: {
     Logo
+  },
+  created: function() {
+      console.log('test created hook')
+      axios.get('https://swapi.co/api/people/1/')
+      .then(res => {
+        console.log(res.data)
+      })
+
   }
 }
 </script>
