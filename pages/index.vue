@@ -20,7 +20,7 @@
           this.clientID +
           '&scope=data:read' +
           '&state=' +
-          this.state"
+          this.storedState"
           target="_blank"
           class="button--grey">TODOist auth</a>
     </div>
@@ -40,9 +40,21 @@ export default {
     console.log('test created hook')
     axios.get('https://swapi.co/api/people/1/')
       .then(res => {
-        console.log(res.data)
+        console.log('SWAPI data: ', res.data)
       })
+    // this.getQueryVariable()
 
+  },
+  mounted: function () {
+    const returnedState = this.getQueryVariable('state')
+    const returnedCode = this.getQueryVariable('code')
+    console.log('window.location: ', window.location)
+    if (returnedState != this.storedState) {
+      console.log('Warning: returned state does not match stored state - our communications have been compromised!')
+      console.log('Stored state: ' + storedState + ', Returned state: ' + returnedState)
+    } else {
+      console.log('Returned state matches stored state, our communications appear to be secure!')
+    }
   },
   methods: {
     runAuth() {
@@ -58,16 +70,29 @@ export default {
         .then(res => {
           console.log(res.data)
         })
+    },
+    getQueryVariable(variable) {
+      console.log('window.location.search: ', window.location.search)
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+          console.log('getQueryVariable search for ' + variable + ': ' + pair[1])
+          return pair[1];
+        }
+      }
+      return (false);
     }
   },
-  data() {
-    return {
-      clientID: 'ea192b83308a4580b068497defed4b60',
-      clientSecret: 'c9bb957808464542b70b67e11fa056e8',
-      authURL: 'https://todoist.com/oauth/authorize',
-      state: 'mikessecret'
-    }
+data() {
+  return {
+    clientID: 'ea192b83308a4580b068497defed4b60',
+    clientSecret: 'c9bb957808464542b70b67e11fa056e8',
+    authURL: 'https://todoist.com/oauth/authorize',
+    storedState: 'mikessecret'
   }
+}
 }
 </script>
 
